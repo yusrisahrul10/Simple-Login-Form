@@ -42,6 +42,8 @@ class RegisterActivity : AppCompatActivity() {
             preference.setPhone(editTextRegisterPhone.text.toString())
             preference.setPassword(editTextRegisterPassword.text.toString())
 
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
             Toast.makeText(this, "Register Success!", Toast.LENGTH_SHORT).show()
 
             finish()
