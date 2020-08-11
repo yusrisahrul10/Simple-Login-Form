@@ -9,20 +9,31 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Toast
+import id.rizmaulana.sheenvalidator.lib.SheenValidator
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var preference : SharedPreference
+
+    private lateinit var sheenValidator: SheenValidator
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         preference = SharedPreference(this)
+        sheenValidator = SheenValidator(this)
 
-        buttonLogin.setOnClickListener {
-            if (editTextLoginPersonName.text.toString() == preference.getEmail()
+        sheenValidator.registerAsEmail(editTextLoginPersonEmail)
+        sheenValidator.registerAsRequired(editTextLoginPersonEmail)
+        sheenValidator.registerAsRequired(editTextLoginPassword)
+
+        sheenValidator.setOnValidatorListener {
+            if (editTextLoginPersonEmail.text.toString() == preference.getEmail()
                 && editTextLoginPassword.text.toString() == preference.getPassword()) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
@@ -32,6 +43,10 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Email or Password Wrong!", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        buttonLogin.setOnClickListener {
+            sheenValidator.validate()
         }
 
         registerClick()
